@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw 开发思路 - 深度英语老师</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            color: #333;
+            background: #f8f9fa;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            font-size: 2em;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 40px;
+            font-size: 1.4em;
+            border-left: 4px solid #667eea;
+            padding-left: 12px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        .intro {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0 30px;
+        }
+        .intro p {
+            margin: 0;
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .idea-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .idea-item h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.85em;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+        .tag.green { background: #27ae60; }
+        .tag.orange { background: #e67e22; }
+        .tag.red { background: #e74c3c; }
+        .update-date {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        hr {
+            margin: 40px 0;
+            border: none;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer-links {
+            text-align: center;
+        }
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← 返回主页</a>
+
+    <h1>🦀 OpenClaw 开发思路</h1>
+    <p class="update-date">最后更新: 2025年</p>
+
+    <div class="intro">
+        <p>OpenClaw 是深度英语老师的开放式 AI 爪子模块，旨在通过多模型协同、开放接口与智能 Agent，打造更强大、更灵活的英语学习体验。以下是核心开发思路与方向。</p>
+    </div>
+
+    <div class="card">
+        <h2>🧠 一、多模型 Agent 架构</h2>
+
+        <div class="idea-item">
+            <h3>1.1 多模型接入与路由</h3>
+            <p>目前已支持 DeepSeek、豆包、Kimi、智谱四家大模型。OpenClaw 的思路是将这些模型抽象成统一的 Agent 接口，由调度层根据任务类型、响应速度、成本等因素动态选择最合适的模型。</p>
+            <ul>
+                <li>统一 API 抽象层，屏蔽各模型差异</li>
+                <li>基于任务类型（发音、例句、释义）智能路由</li>
+                <li>支持模型降级与容错回退</li>
+            </ul>
+            <div>
+                <span class="tag">AI 路由</span>
+                <span class="tag green">可扩展</span>
+            </div>
+        </div>
+
+        <div class="idea-item">
+            <h3>1.2 Agent 链式调用</h3>
+            <p>对于复杂学习任务，OpenClaw 支持将多个 Agent 串联成调用链：例如先由"词义分析 Agent"解析单词，再由"例句生成 Agent"造句，最后由"发音 Agent"朗读。</p>
+            <ul>
+                <li>定义标准化的 Agent 输入/输出协议</li>
+                <li>支持并行调用多个 Agent 以缩短响应时间</li>
+                <li>链式结果缓存，避免重复请求</li>
+            </ul>
+            <div>
+                <span class="tag">Agent 链</span>
+                <span class="tag orange">核心功能</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📖 二、开放词汇学习接口</h2>
+
+        <div class="idea-item">
+            <h3>2.1 词汇数据开放</h3>
+            <p>OpenClaw 计划提供开放的词汇数据接口，允许用户或第三方开发者导入自定义词库，或将学习数据导出到其他平台。</p>
+            <ul>
+                <li>支持 CSV / JSON 格式词库导入导出</li>
+                <li>兼容常见词汇标准（CET-4/6、托福、GRE 等）</li>
+                <li>提供公开的词汇 API，方便集成到其他应用</li>
+            </ul>
+            <div>
+                <span class="tag">开放数据</span>
+                <span class="tag green">互操作性</span>
+            </div>
+        </div>
+
+        <div class="idea-item">
+            <h3>2.2 用户自定义学习计划</h3>
+            <p>允许用户根据自身需求定义学习目标和计划，OpenClaw 根据计划自动调度 Agent 生成对应的学习内容。</p>
+            <ul>
+                <li>支持每日目标单词数量设置</li>
+                <li>基于遗忘曲线的智能复习调度</li>
+                <li>学习进度可视化与统计报告</li>
+            </ul>
+            <div>
+                <span class="tag">个性化</span>
+                <span class="tag orange">学习体验</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🔌 三、插件化与可扩展性</h2>
+
+        <div class="idea-item">
+            <h3>3.1 插件系统设计</h3>
+            <p>OpenClaw 的核心设计理念之一是插件化：每一种学习能力（发音、翻译、例句、测验）都是一个可插拔的模块，开发者可以按需启用或替换。</p>
+            <ul>
+                <li>定义标准插件接口与生命周期钩子</li>
+                <li>内置插件：TTS 朗读、AI 例句、词根分析、近义词推荐</li>
+                <li>支持社区贡献的第三方插件</li>
+            </ul>
+            <div>
+                <span class="tag">插件化</span>
+                <span class="tag green">开源友好</span>
+            </div>
+        </div>
+
+        <div class="idea-item">
+            <h3>3.2 跨平台同步</h3>
+            <p>通过开放的同步协议，OpenClaw 支持在 iPhone、iPad、Mac 之间无缝同步学习数据，并计划支持通过 AirDrop 或局域网快速传输词库。</p>
+            <ul>
+                <li>基于 iCloud 的数据同步</li>
+                <li>支持 AirDrop 批量词库分享</li>
+                <li>端到端加密保护用户数据</li>
+            </ul>
+            <div>
+                <span class="tag">跨平台</span>
+                <span class="tag">数据安全</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🚀 四、近期开发计划</h2>
+
+        <div class="idea-item">
+            <h3>短期目标</h3>
+            <ul>
+                <li>✅ 完成四大模型（DeepSeek、豆包、Kimi、智谱）的统一接入</li>
+                <li>✅ 支持 Apple TTS 朗读与自动发音</li>
+                <li>🔄 优化 Agent 链式调用稳定性，减少偶尔不读英语单词的问题</li>
+                <li>🔄 增加词汇 CSV 导入功能</li>
+            </ul>
+            <div>
+                <span class="tag green">已完成</span>
+                <span class="tag orange">进行中</span>
+            </div>
+        </div>
+
+        <div class="idea-item">
+            <h3>中长期目标</h3>
+            <ul>
+                <li>📌 开放词汇数据 API，支持第三方集成</li>
+                <li>📌 构建插件市场，允许社区贡献学习模块</li>
+                <li>📌 引入语音识别，支持口语练习与发音评分</li>
+                <li>📌 基于用户行为数据，进一步优化 AI 模型选路策略</li>
+            </ul>
+            <div>
+                <span class="tag red">规划中</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>💬 参与贡献</h2>
+        <p>OpenClaw 欢迎开发者、教育者和英语学习爱好者共同参与建设。如果您有好的开发思路或功能建议，请联系我们：</p>
+        <p>📧 <a href="mailto:30758919@qq.com" style="color:#667eea;">support@deepenglish.com</a></p>
+        <p>我们非常重视每一条反馈，期待与您一起让英语学习变得更智能、更高效！</p>
+    </div>
+
+    <hr>
+    <div class="footer-links">
+        <a href="index.html">返回主页</a> |
+        <a href="privacy.html">隐私政策</a> |
+        <a href="terms.html">使用条款</a>
+    </div>
+</body>
+</html>
